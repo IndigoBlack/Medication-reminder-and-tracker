@@ -4,6 +4,7 @@ from google.auth.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import questionary
+import requests
 import datetime
 import csv
 import os
@@ -90,3 +91,15 @@ def self_track(pills):
 #   if possible use google maps API to show pharmacies that are close that the patient can get a refill at
 #   Call an api that will give you information about the medication when requested:
 #       Search up the which API to use for this
+
+url = "https://api.fda.gov/drug/label.json"
+
+params = {
+    "search": "aspirin",
+    "limit": 1
+}
+response = requests.get(url, params=params)
+data = response.json()
+
+for result in data.get("results"):
+    print(result.get("description", ""))
